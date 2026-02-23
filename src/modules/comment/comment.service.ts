@@ -1,4 +1,4 @@
-import { CommentStatus } from "../../../generated/prisma/enums"
+import { CommentStatus } from "@prisma/client"
 import { prisma } from "../../lib/prisma"
 
 

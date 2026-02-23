@@ -1,4 +1,4 @@
-# 📝 Blog App with Prisma
+# 📝 Blog App Server
 
 A modern, robust, and feature-rich blog server built with **Express**, **Prisma**, and **Better-Auth**. This project implements a scalable architecture for managing posts, comments, authentications, and user roles with high visual excellence and performance.
 
@@ -132,6 +132,7 @@ Base path: `/posts`
 | GET | `/` | Get all posts (Supports pagination & filtering) | No |
 | GET | `/:postId` | Get a specific post by ID | No |
 | GET | `/my-posts` | Get posts created by the logged-in user | `USER`, `ADMIN` |
+| GET | `/view/stats` | Get overall site statistics | `ADMIN` |
 | PATCH | `/:postId` | Update an existing post | `USER` (Owner), `ADMIN` |
 | DELETE | `/:postId` | Delete a post | `USER` (Owner), `ADMIN` |
 

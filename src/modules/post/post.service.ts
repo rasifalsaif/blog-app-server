@@ -1,5 +1,5 @@
-import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
-import { PostWhereInput } from "../../../generated/prisma/models";
+import { CommentStatus, Post, PostStatus, Prisma } from "@prisma/client";
+
 import { prisma } from "../../lib/prisma";
 
 const createPost = async (data: Omit<Post, "id" | "createdAt" | "updatedAt" | "authorId">, userId: string) => {
@@ -26,7 +26,7 @@ const getAllPosts = async ({ search, tags, isFeatured, status, authorId, page, l
     sortOrder: string
   }) => {
 
-  const andConditions: PostWhereInput[] = [];
+  const andConditions: Prisma.PostWhereInput[] = [];
   if (search) {
     andConditions.push({
       OR: [
@@ -254,6 +254,40 @@ const deletePost = async (postId: string, authorId: string, isAdmin: boolean) =>
   return result;
 }
 
+const getStats = async () => {
+  return await prisma.$transaction(async (tx) => {
+    const [totalPosts, publlishedPosts, draftPosts, archivedPosts, totalComments, approvedComment, totalUsers, adminCount, userCount, totalViews] =
+      await Promise.all([
+        await tx.post.count(),
+        await tx.post.count({ where: { status: PostStatus.PUBLISHED } }),
+        await tx.post.count({ where: { status: PostStatus.DRAFT } }),
+        await tx.post.count({ where: { status: PostStatus.ARCHIVED } }),
+        await tx.comment.count(),
+        await tx.comment.count({ where: { STATUS: CommentStatus.APPROVED } }),
+        await tx.user.count(),
+        await tx.user.count({ where: { role: "ADMIN" } }),
+        await tx.user.count({ where: { role: "USER" } }),
+        await tx.post.aggregate({
+          _sum: { views: true }
+        })
+      ])
+
+    return {
+      totalPosts,
+      publlishedPosts,
+      draftPosts,
+      archivedPosts,
+      totalComments,
+      approvedComment,
+      totalUsers,
+      adminCount,
+      userCount,
+      totalViews: totalViews._sum.views
+    }
+  })
+
+}
+
 export const postService = {
   createPost,
   getAllPosts,
@@ -261,4 +295,5 @@ export const postService = {
   getMyPosts,
   updatePost,
   deletePost,
+  getStats,
 };

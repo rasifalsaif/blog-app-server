@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { postService } from "./post.service";
-import { PostStatus } from "../../../generated/prisma/client";
+import { PostStatus } from "@prisma/client";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 import { UserRole } from "../../middlewares/auth";
 
@@ -62,7 +62,7 @@ const getPostById = async (req: Request, res: Response) => {
         if (!postId) {
             throw new Error("Post ID is required");
         }
-        const result = await postService.getPostById(postId);
+        const result = await postService.getPostById(postId as string);
         res.status(200).json({
             success: true,
             message: "Post retrieved successfully",
@@ -135,7 +135,7 @@ const deletePost = async (req: Request, res: Response) => {
         }
         const { postId } = req.params;
         const isAdmin = user.role === UserRole.ADMIN;
-        console.log("user is: ", user)
+        // console.log("user is: ", user)
         if (!postId) {
             throw new Error("Post ID is required");
         }
@@ -154,6 +154,23 @@ const deletePost = async (req: Request, res: Response) => {
     }
 }
 
+const getStats = async (req: Request, res: Response) => {
+    try {
+        const result = await postService.getStats();
+        res.status(200).json({
+            success: true,
+            message: "Stats retrieved successfully",
+            data: result,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve stats",
+            details: error instanceof Error ? error.message : "Unknown error"
+        });
+    }
+}
+
 export const postController = {
     createPost,
     getAllPosts,
@@ -161,4 +178,5 @@ export const postController = {
     getMyPosts,
     updatePost,
     deletePost,
+    getStats,
 };
