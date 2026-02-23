@@ -109,6 +109,55 @@ npm run seed:admin
 
 ---
 
+## 🔌 API Reference
+
+### 🔐 Authentication (`/api/auth`)
+Powered by **Better-Auth**. Base path: `/api/auth`
+
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| POST | `/sign-up/email` | Create a new user account | No |
+| POST | `/sign-in/email` | Sign in with email and password | No |
+| POST | `/sign-out` | Sign out and clear session | Yes |
+| GET | `/get-session` | Get current user session | Yes |
+
+---
+
+### 📝 Posts (`/posts`)
+Base path: `/posts`
+
+| Method | Endpoint | Description | Role Required |
+| :--- | :--- | :--- | :--- |
+| POST | `/` | Create a new post | `USER`, `ADMIN` |
+| GET | `/` | Get all posts (Supports pagination & filtering) | No |
+| GET | `/:postId` | Get a specific post by ID | No |
+| GET | `/my-posts` | Get posts created by the logged-in user | `USER`, `ADMIN` |
+| PATCH | `/:postId` | Update an existing post | `USER` (Owner), `ADMIN` |
+| DELETE | `/:postId` | Delete a post | `USER` (Owner), `ADMIN` |
+
+**Query Parameters (GET `/`):**
+- `page`, `limit`: Pagination controls.
+- `search`: Search by title or content.
+- `tags`: Filter by tags (comma-separated).
+- `status`: Filter by `PUBLISHED`, `DRAFT`, or `ARCHIVED`.
+- `isFeatured`: Filter featured posts (`true`/`false`).
+
+---
+
+### 💬 Comments (`/comments`)
+Base path: `/comments`
+
+| Method | Endpoint | Description | Role Required |
+| :--- | :--- | :--- | :--- |
+| POST | `/` | Create a new comment/reply | `USER`, `ADMIN` |
+| GET | `/:commentId` | Get a specific comment | No |
+| GET | `/author/:authorId`| Get comments by a specific author | No |
+| PATCH | `/:commentId` | Update a comment | `USER` (Owner), `ADMIN` |
+| DELETE | `/:commentId` | Delete a comment | `USER` (Owner), `ADMIN` |
+| PATCH | `/:commentId/moderate` | Approve or Reject a comment | `ADMIN` |
+
+---
+
 ## 📜 License
 
 This project is licensed under the [ISC License](LICENSE).
