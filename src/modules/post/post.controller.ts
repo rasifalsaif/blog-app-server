@@ -1,8 +1,4 @@
-import { NextFunction, Request, Response } from "express";
-import { postService } from "./post.service";
-import { PostStatus } from "@prisma/client";
-import paginationSortingHelper from "../../helpers/paginationSortingHelper";
-import { UserRole } from "../../middlewares/auth";
+/**\n * Post Controller Layer\n * \n * Handles HTTP request/response for post-related endpoints:\n * - Request validation and parsing\n * - Extracting query/path parameters\n * - Calling service layer methods\n * - Formatting and sending responses\n * - Error handling via next(error)\n */\n\nimport { NextFunction, Request, Response } from "express";\nimport { postService } from "./post.service";\nimport { PostStatus } from "@prisma/client";\nimport paginationSortingHelper from "../../helpers/paginationSortingHelper";\nimport { UserRole } from "../../middlewares/auth";
 
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
