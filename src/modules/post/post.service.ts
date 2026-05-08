@@ -1,8 +1,4 @@
-import { CommentStatus, Post, PostStatus, Prisma } from "@prisma/client";
-
-import { prisma } from "../../lib/prisma";
-
-const createPost = async (data: Omit<Post, "id" | "createdAt" | "updatedAt" | "authorId">, userId: string) => {
+/**\n * Post Service Layer\n * \n * Handles all business logic for blog post operations:\n * - CRUD operations (Create, Read, Update, Delete)\n * - Post filtering and search\n * - Pagination and sorting\n * - Statistics aggregation\n * - Access control validation\n */\n\nimport { CommentStatus, Post, PostStatus, Prisma } from \"@prisma/client\";\nimport { prisma } from \"../../lib/prisma\";\n\n/**\n * Create a new blog post\n * \n * @param data - Post data (title, content, tags, etc.)\n * @param userId - ID of the user creating the post (set as author)\n * @returns Created post object with generated ID and timestamps\n */\nconst createPost = async (data: Omit<Post, \"id\" | \"createdAt\" | \"updatedAt\" | \"authorId\">, userId: string) => {
   const result = await prisma.post.create({
     data: {
       ...data,
