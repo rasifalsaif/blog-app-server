@@ -1,10 +1,10 @@
-# 📝 Blog App Server
+# Blog Application Server
 
-A modern, robust, and feature-rich blog server built with **Express**, **Prisma**, and **Better-Auth**. This project implements a scalable architecture for managing posts, comments, authentications, and user roles with high visual excellence and performance.
+A scalable, production-ready blog server built with **Express**, **Prisma**, and **Better-Auth**. This project provides a comprehensive platform for managing blog content, user authentication, and hierarchical discussions with enterprise-grade performance and security.
 
 ---
 
-## 🚀 Tech Stack
+## Technology Stack
 
 | Component | Technology |
 | :--- | :--- |
@@ -19,29 +19,29 @@ A modern, robust, and feature-rich blog server built with **Express**, **Prisma*
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-- **Robust Authentication**: Secure sign-up/sign-in using `Better-Auth` with email verification and session management.
-- **Advanced Post Management**: Create, update, and manage blog posts with rich metadata (tags, thumbnails, featured status).
-- **Nested Comment System**: Full support for hierarchical comments (replies) with approval workflows.
-- **Role-Based Access Control**: Differentiated functionality for Admins and Users.
-- **High Performance**: Optimized queries using Prisma indices and PostgreSQL.
-- **Automated Seeding**: Ready-to-use scripts to set up admin users and initial data.
-
----
-
-## 📊 Database Schema
-
-The project uses a structured relational schema defined in `prisma/schema.prisma`:
-
-- **User**: Stores profiles, roles (Admin/User), and status (Active/Inactive).
-- **Post**: Manages blog content, status (Draft/Published), views, and tags.
-- **Comment**: Handles user interaction with posts, including nested replies and moderation states.
-- **Auth Related**: `Session`, `Account`, and `Verification` tables for secure identity management.
+- **Enterprise-Grade Authentication**: Implements secure user authentication through Better-Auth, featuring email verification, session management, and industry-standard security protocols.
+- **Comprehensive Post Management**: Full-featured blog post administration with support for rich metadata including tags, thumbnails, and featured content designation.
+- **Hierarchical Comment System**: Supports nested comment threads with built-in moderation workflows for content governance.
+- **Role-Based Access Control (RBAC)**: Implements differentiated permission levels for administrative and standard user roles.
+- **Performance Optimization**: Leverages Prisma query optimization and PostgreSQL indexing strategies for efficient data retrieval and system responsiveness.
+- **Automated Data Initialization**: Includes ready-to-deploy seeding scripts for rapid development and testing environment setup.
 
 ---
 
-## 🛠️ Getting Started
+## Database Schema
+
+The application employs a relational data model defined in `prisma/schema.prisma`:
+
+- **User**: Maintains user profiles, role assignments (Admin/User), and account status (Active/Inactive).
+- **Post**: Manages blog content with status tracking (Draft/Published), view metrics, and tag associations.
+- **Comment**: Facilitates user discussions on posts with support for nested replies and moderation controls.
+- **Authentication**: Provides `Session`, `Account`, and `Verification` tables for secure identity and access management.
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
@@ -56,43 +56,43 @@ The project uses a structured relational schema defined in `prisma/schema.prisma
    cd blog-app-with-prisma
    ```
 
-2. **Install dependencies**:
+2. **Install Dependencies**:
    ```bash
    npm install
    ```
 
-3. **Configure Environment**:
-   Create a `.env` file in the root directory and add your credentials:
+3. **Environment Configuration**:
+   Create a `.env` file in the project root with the following variables:
    ```env
    DATABASE_URL="postgresql://username:password@localhost:5432/blog_db"
    BETTER_AUTH_SECRET="your-secret-key"
-   # Add other necessary environment variables
+   # Additional environment variables as needed
    ```
 
-4. **Initialize Database**:
+4. **Database Initialization**:
    ```bash
    npx prisma migrate dev --name init
    ```
 
 ---
 
-## 🏃 Usage
+## Usage
 
 ### Development Mode
-Start the server with auto-reload:
+Start the development server with hot-reload enabled:
 ```bash
 npm run dev
 ```
 
-### Seed Admin User
-Quickly set up an admin user for initial testing:
+### Initialize Admin User
+Provision an administrative account for system initialization and testing:
 ```bash
 npm run seed:admin
 ```
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 ├── prisma/               # Prisma schema and migrations
@@ -109,63 +109,65 @@ npm run seed:admin
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
-### 🔐 Authentication (`/api/auth`)
-Powered by **Better-Auth**. Base path: `/api/auth`
+### Authentication (`/api/auth`)
+Authentication service powered by **Better-Auth**. Base path: `/api/auth`
 
 | Method | Endpoint | Description | Auth Required |
 | :--- | :--- | :--- | :--- |
-| POST | `/sign-up/email` | Create a new user account | No |
-| POST | `/sign-in/email` | Sign in with email and password | No |
-| POST | `/sign-out` | Sign out and clear session | Yes |
-| GET | `/get-session` | Get current user session | Yes |
+| POST | `/sign-up/email` | Register a new user account | No |
+| POST | `/sign-in/email` | Authenticate with email and password credentials | No |
+| POST | `/sign-out` | Terminate the current user session | Yes |
+| GET | `/get-session` | Retrieve active session information for the authenticated user | Yes |
 
 ---
 
-### 📝 Posts (`/posts`)
+### Posts (`/posts`)
 Base path: `/posts`
 
 | Method | Endpoint | Description | Role Required |
 | :--- | :--- | :--- | :--- |
-| POST | `/` | Create a new post | `USER`, `ADMIN` |
-| GET | `/` | Get all posts (Supports pagination & filtering) | No |
-| GET | `/:postId` | Get a specific post by ID | No |
-| GET | `/my-posts` | Get posts created by the logged-in user | `USER`, `ADMIN` |
-| GET | `/view/stats` | Get overall site statistics | `ADMIN` |
+| POST | `/` | Create a new blog post | `USER`, `ADMIN` |
+| GET | `/` | Retrieve all posts with support for pagination and filtering | No |
+| GET | `/:postId` | Retrieve a specific post by identifier | No |
+| GET | `/my-posts` | Retrieve posts authored by the authenticated user | `USER`, `ADMIN` |
+| GET | `/view/stats` | Retrieve comprehensive platform statistics | `ADMIN` |
 | PATCH | `/:postId` | Update an existing post | `USER` (Owner), `ADMIN` |
 | DELETE | `/:postId` | Delete a post | `USER` (Owner), `ADMIN` |
 
-**Query Parameters (GET `/`):**
-- `page`, `limit`: Pagination controls.
-- `search`: Search by title or content.
-- `tags`: Filter by tags (comma-separated).
-- `status`: Filter by `PUBLISHED`, `DRAFT`, or `ARCHIVED`.
-- `isFeatured`: Filter featured posts (`true`/`false`).
+**Query Parameters for GET `/posts`:**
+- `page`, `limit`: Control pagination parameters.
+- `search`: Full-text search across post title and content.
+- `tags`: Filter results by tags (comma-separated values).
+- `status`: Filter by publication status (`PUBLISHED`, `DRAFT`, `ARCHIVED`).
+- `isFeatured`: Filter by featured status (`true`/`false`).
 
 ---
 
-### 💬 Comments (`/comments`)
+### Comments (`/comments`)
 Base path: `/comments`
 
 | Method | Endpoint | Description | Role Required |
 | :--- | :--- | :--- | :--- |
-| POST | `/` | Create a new comment/reply | `USER`, `ADMIN` |
-| GET | `/:commentId` | Get a specific comment | No |
-| GET | `/author/:authorId`| Get comments by a specific author | No |
-| PATCH | `/:commentId` | Update a comment | `USER` (Owner), `ADMIN` |
+| POST | `/` | Create a new comment or reply | `USER`, `ADMIN` |
+| GET | `/:commentId` | Retrieve a specific comment | No |
+| GET | `/author/:authorId`| Retrieve all comments authored by a specific user | No |
+| PATCH | `/:commentId` | Update an existing comment | `USER` (Owner), `ADMIN` |
 | DELETE | `/:commentId` | Delete a comment | `USER` (Owner), `ADMIN` |
-| PATCH | `/:commentId/moderate` | Approve or Reject a comment | `ADMIN` |
+| PATCH | `/:commentId/moderate` | Approve or reject a comment | `ADMIN` |
 
 ---
 
 
-## 🤝 Contributing
+## Contributing
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome and encouraged. Please follow the standard development workflow:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/FeatureName`)
+3. Implement your changes and commit them (`git commit -m 'Add FeatureName'`)
+4. Push to the branch (`git push origin feature/FeatureName`)
+5. Submit a Pull Request for review
 
 ---
